@@ -314,7 +314,7 @@ nacos注册中心配置
     ```
 
    &nbsp;
-   4. 创建应用基础配置 ==gateway_server.yaml==
+   4. 创建应用基础配置 ==app_base.yaml==
 
     ```yaml
       # 应用公共配置
@@ -338,11 +338,11 @@ nacos注册中心配置
 
               # 黑白名单过滤
             - name: RBL
-            args:
-              blacklistUrl:
-              - /echo222/**
-              whitelistUrl:
-              - /echo333/**
+              args:
+                blacklistUrl:
+                - /echo222/**
+                whitelistUrl:
+                - /echo333/**
 
               # 认证
             - AppAuth
