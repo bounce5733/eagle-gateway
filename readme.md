@@ -51,7 +51,7 @@
 
 ## 功能
 
-==spring cloud gateway 框架自带功能请参考官网==
+spring cloud gateway 框架自带功能请参考官网
 
 ### 安全组件
   
@@ -59,7 +59,7 @@
 
 校验请求参数和请求体SQL注入关键字
 
-  - 检查==请求参数==和==applicaiton/json类型body数据==中的sql注入风险
+  - 检查请求参数和applicaiton/json类型body数据中的sql注入风险
   &nbsp;
   - 配置代码
     ```yaml
@@ -80,9 +80,9 @@ todo...
 
 对前端加密的请求参数和请求体数据在网关解密
 
-  - ==请求参数==和==application/json类型body数据==解密
+  - 请求参数和application/json类型body数据解密
   &nbsp;
-  - 加密算法： ==AES==，加密算法/加密模式／填充类型：==AES/ECB/Pkcs7==，加密密码：==app secret==，密钥偏移量：==abcdef0123456789==
+  - 加密算法： AES，加密算法/加密模式／填充类型：AES/ECB/Pkcs7，加密密码：app secret，密钥偏移量：abcdef0123456789
   &nbsp;
   - 配置代码
     ```yaml
@@ -99,9 +99,9 @@ todo...
 
 防止中间人截获请求重放攻击
 
-  - 请求唯一性检测，通过添加HTTP HEADER ==x-ca-reqid: uuid==
+  - 请求唯一性检测，通过添加HTTP HEADER x-ca-reqid: uuid
   &nbsp;
-  - 请求过期检测，通过添加HTTP HEADER:==x-ca-reqtime: currentTimeMillis==
+  - 请求过期检测，通过添加HTTP HEADER:x-ca-reqtime: currentTimeMillis
   &nbsp;
   - 配置代码
     ```yaml
@@ -169,7 +169,7 @@ todo
     1009 | URI查询参数不合法
     1010 | 请求数据包含SQL注入风险
 
-  - HTTP 异常码 ==参考网络==
+  - HTTP 异常码 参考网络
 
 #### 请求熔断
 
@@ -251,11 +251,11 @@ nacos注册中心配置
 
    1. 登陆
       http://127.0.0.1:8848/nacos/#/login
-      ==nacos/nacos==
+      nacos/nacos
     &nbsp;
-   2. 创建命名空间如 ==sit==
+   2. 创建命名空间如 sit
    &nbsp;
-   3. 创建网关基础配置 ==gateway_server.yaml==
+   3. 创建网关基础配置 gateway_server.yaml
 
     ```yaml
       server:
@@ -314,7 +314,7 @@ nacos注册中心配置
     ```
 
    &nbsp;
-   4. 创建应用基础配置 ==app_base.yaml==
+   4. 创建应用基础配置 app_base.yaml
 
     ```yaml
       # 应用公共配置
@@ -367,7 +367,7 @@ nacos注册中心配置
             - SessionHeader
     ```
     &nbsp;
-   5. 创建应用服务路由配置 ==app_service1.yaml==
+   5. 创建应用服务路由配置 app_service1.yaml
 
     ```yaml
       spring:
