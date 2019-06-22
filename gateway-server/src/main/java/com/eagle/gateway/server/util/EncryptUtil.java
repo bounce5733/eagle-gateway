@@ -27,6 +27,7 @@ import sun.misc.BASE64Encoder;
  * @author jiangyonghua
  * @date 2019年6月14日
  */
+@SuppressWarnings("restriction")
 @Slf4j
 public class EncryptUtil {
 
