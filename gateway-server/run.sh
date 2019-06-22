@@ -7,7 +7,7 @@ APP_NAME=gateway-server
 JAR_NAME=${APP_NAME}.jar
 JAVA_OPTS="-Xms256m -Xmx512m"
 
-CONFIG_ADDRESS=12.99.234.226:8848
+CONFIG_ADDRESS=127.0.0.1:8848
 CONFILE_FILES=gateway_server.yaml,app_route.yaml
 CONFIG_PREFIX=spring.cloud.nacos.config
 JAVA_CONF_OPTS=\
