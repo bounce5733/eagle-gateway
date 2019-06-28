@@ -2,6 +2,7 @@ package com.eagle.gateway.server.filter.factory;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,6 +51,11 @@ import reactor.core.publisher.Mono;
 public class RequestDecryptGatewayFilterFactory
 		extends AbstractGatewayFilterFactory<RequestDecryptGatewayFilterFactory.Config> {
 
+	/**
+	 * 校验数据分隔符
+	 */
+	private static final String CHECK_VALS_SPLIT = " ";
+
 	@Override
 	public GatewayFilter apply(Config config) {
 		return (exchange, chain) -> {
@@ -70,7 +76,7 @@ public class RequestDecryptGatewayFilterFactory
 							List<String> decryptVals = new ArrayList<>();
 							vals.forEach(val -> {
 								String decryptVal = EncryptUtil.decryptAES(val, SysConst.ENCRYPT_KEY);
-								queryParamsExchangeVals.append(decryptVal).append(" ");// 空格用于区分每个健值
+								queryParamsExchangeVals.append(decryptVal).append(CHECK_VALS_SPLIT);// 空格用于区分每个健值
 								try {
 									decryptVals.add(URLEncoder.encode(decryptVal, SysConst.ENCODING));
 								} catch (UnsupportedEncodingException e) {
@@ -80,7 +86,7 @@ public class RequestDecryptGatewayFilterFactory
 							newMultiKeyParams.put(key, decryptVals);
 						} else {
 							String decryptVal = EncryptUtil.decryptAES(vals.get(0), SysConst.ENCRYPT_KEY);
-							queryParamsExchangeVals.append(decryptVal).append(" ");// 空格用于区分每个健值
+							queryParamsExchangeVals.append(decryptVal).append(CHECK_VALS_SPLIT);// 空格用于区分每个健值
 							try {
 								newSingleKeyParams.put(key, URLEncoder.encode(decryptVal, SysConst.ENCODING));
 							} catch (UnsupportedEncodingException e) {
@@ -135,6 +141,35 @@ public class RequestDecryptGatewayFilterFactory
 						exchange.getAttributes().put(ServerExchangeKey.requestBody.name(), decryptBody);
 
 						return Mono.just(decryptBody);
+					}
+					if (MediaType.APPLICATION_FORM_URLENCODED.isCompatibleWith(mediaType)) {
+						Map<String, String> formDataMap = new HashMap<>();
+						String[] formDataArry = body.split("&");
+						for (int i = 0; i < formDataArry.length; i++) {
+							String[] formDataItem = formDataArry[i].split("=");
+							try {
+								formDataMap.put(formDataItem[0], EncryptUtil.decryptAES(
+										URLDecoder.decode(formDataItem[1], SysConst.ENCODING), SysConst.ENCRYPT_KEY));
+							} catch (UnsupportedEncodingException e) {
+								throw new ServerException(ServerErrorCode.DATA_DECRYPT_ERROR);
+							}
+						}
+
+						// 组装回明文数据
+						StringBuffer decryptFormDataSb = new StringBuffer();
+						StringBuffer decryptFormDataValsSb = new StringBuffer();
+						formDataMap.forEach((key, val) -> {
+							decryptFormDataSb.append(key).append("=").append(val).append("&");
+							decryptFormDataValsSb.append(val).append(CHECK_VALS_SPLIT);
+						});
+						if (decryptFormDataSb.length() > 0) {
+							String decryptFormDataStr = decryptFormDataSb.substring(0, decryptFormDataSb.length() - 1);
+							// form data values数据入过滤链
+							exchange.getAttributes().put(ServerExchangeKey.requestBody.name(),
+									decryptFormDataValsSb.toString());
+
+							return Mono.just(decryptFormDataStr);
+						}
 					}
 					return Mono.empty();
 				});
