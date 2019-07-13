@@ -11,14 +11,14 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 
 @Configuration
 @EnableAuthorizationServer
-public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
+public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
 	private final AuthenticationManager authenticationManager;
 
 	private final UserDetailsService userDetailsService;
 
 	@Autowired
-	public AuthorizationServerConfiguration(AuthenticationManager authenticationManager,
+	public AuthServerConfig(AuthenticationManager authenticationManager,
 			UserDetailsService userDetailsService) {
 		this.authenticationManager = authenticationManager;
 		this.userDetailsService = userDetailsService;
