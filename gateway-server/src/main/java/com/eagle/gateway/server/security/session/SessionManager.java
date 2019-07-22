@@ -47,8 +47,10 @@ public class SessionManager {
 		String token = "";
 		redisTemplate.convertAndSend(SESSION_REDIS_TOPIC, appid + "|" + token);
 		GwSession user = new GwSession();
-		user.setUserid("123");
-		user.setUsername("张三");
+		user.setAppID("123");
+		user.setJobNO("23232");
+		user.setOrgID("123");
+		user.setUserName("张三");
 
 		String sessionid = IdGenUtil.uuid();
 		appSession.put(sessionid, user);

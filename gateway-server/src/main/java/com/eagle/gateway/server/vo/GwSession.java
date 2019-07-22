@@ -11,9 +11,11 @@ import lombok.Data;
 @Data
 public class GwSession {
 
-	private String sessionid;
+	private String appID;
 
-	private String userid;
+	private String userName;
 
-	private String username;
+	private String orgID;
+
+	private String jobNO;
 }

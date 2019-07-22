@@ -36,8 +36,7 @@ import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.api.config.ConfigService;
-import com.eagle.gateway.server.enums.AppConfigKey;
-import com.eagle.gateway.server.enums.ConfigFileName;
+import com.eagle.gateway.server.constant.SysConst;
 
 /**
  * 做了路由合并修改
@@ -97,20 +96,20 @@ public class NacosPropertySourceLocator implements PropertySourceLocator {
 		NacosPropertySource appBasePropertySource = null;
 
 		for (PropertySource<?> ps : composite.getPropertySources()) {
-			if (ConfigFileName.GATEWAY_SERVER_YAML.getValue().equals(ps.getName())) {
+			if (SysConst.GATEWAY_SERVER_YAML.equals(ps.getName())) {
 				newComposite.addPropertySource(ps);
 			}
-			if (ConfigFileName.APP_BASE_YAML.getValue().equals(ps.getName())) {
+			if (SysConst.GATEWAY_CUSTOM_YAML.equals(ps.getName())) {
 				appBasePropertySource = (NacosPropertySource) ps;
 				newComposite.addPropertySource(appBasePropertySource);
 			}
 		}
 
-		// 计算ConfigFileName.APP_BASE_YAML里面的公共路由数量
+		// 计算GATEWAY_SERVER_YAML里面的公共路由数量
 		Set<String> routeDataIdArry = new HashSet<>();
 		Set<Integer> baseRouteIndexSet = new HashSet<>();
 		for (PropertySource<?> ps : composite.getPropertySources()) {
-			if (ConfigFileName.APP_BASE_YAML.getValue().equals(ps.getName()) && ps instanceof NacosPropertySource) {
+			if (SysConst.GATEWAY_SERVER_YAML.equals(ps.getName()) && ps instanceof NacosPropertySource) {
 				NacosPropertySource basePropertySource = (NacosPropertySource) ps;
 				for (String k : basePropertySource.getSource().keySet()) {
 					if (k.startsWith("spring.cloud.gateway.routes")) {
@@ -119,7 +118,7 @@ public class NacosPropertySourceLocator implements PropertySourceLocator {
 						int routeIndex = Integer.valueOf(k.substring(routeIndexStart + 1, routeIndexEnd));
 						baseRouteIndexSet.add(routeIndex);
 					}
-					if (k.startsWith(AppConfigKey.ROUTES_FILENAMES.value())) {
+					if (k.startsWith("app.routes.filenames")) {
 						routeDataIdArry.add(basePropertySource.getSource().get(k).toString());
 					}
 				}
@@ -131,8 +130,8 @@ public class NacosPropertySourceLocator implements PropertySourceLocator {
 
 		int mergeBeginRouteIndex = baseRouteIndexSet.size();
 		for (PropertySource<?> ps : composite.getPropertySources()) {
-			if (!ConfigFileName.GATEWAY_SERVER_YAML.getValue().contentEquals(ps.getName())
-					&& !ConfigFileName.APP_BASE_YAML.getValue().contentEquals(ps.getName())) {
+			if (!SysConst.GATEWAY_SERVER_YAML.contentEquals(ps.getName())
+					&& !SysConst.GATEWAY_CUSTOM_YAML.contentEquals(ps.getName())) {
 				if (ps instanceof NacosPropertySource) {
 					NacosPropertySource nps = (NacosPropertySource) ps;
 					if (nps.getSource() != null && nps.getSource().get("spring.cloud.gateway.routes[0].id") != null) {

@@ -143,7 +143,7 @@
 		level="debug" />
 
 	<!-- 生产环境下，将此级别配置为适合的级别，以免日志文件太多或影响程序性能 -->
-	<root level="debug">
+	<root level="info">
 		<!-- <appender-ref ref="FILEERROR" /> <appender-ref ref="FILEWARN" /> <appender-ref 
 			ref="FILEINFO" /> -->
 		<!-- 生产环境将请stdout去掉 -->

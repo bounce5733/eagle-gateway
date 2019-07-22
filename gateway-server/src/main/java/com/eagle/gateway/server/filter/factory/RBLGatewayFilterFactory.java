@@ -28,7 +28,7 @@ public class RBLGatewayFilterFactory extends AbstractGatewayFilterFactory<RBLGat
 	public GatewayFilter apply(Config config) {
 		return (exchange, chain) -> {
 			log.debug("========进入黑名单检测过滤器========");
-			
+
 			String url = exchange.getRequest().getURI().getPath();
 			if (config.matchBlacklist(url))
 				throw new ServerException(ServerErrorCode.ILLEGAL_URL, url);

@@ -27,4 +27,8 @@ public class SysConst {
 	 */
 	public static final String ENCRYPT_KEY = "test,34343";
 
+	// 网关固定配置文件
+	public static final String GATEWAY_SERVER_YAML = "gateway_server.yaml";
+	public static final String GATEWAY_CUSTOM_YAML = "gateway_custom.yaml";
+
 }

@@ -28,6 +28,7 @@ public class HttpTest {
 	private String sessionid = "";
 
 	@Before
+	@Ignore
 	public void setup() {
 		this.webClient = WebTestClient.bindToServer().defaultCookie(ServerExchangeKey.gw_session.name(), sessionid)
 				.defaultHeader(SecurityHeaderKey.REQID.value(), IdGenUtil.uuid())
@@ -39,6 +40,7 @@ public class HttpTest {
 	 * 测试路由
 	 */
 	@Test
+	@Ignore
 	public void echo() {
 		ResponseSpec res = webClient.get().uri(BASE_URL + "/echo/11").exchange().expectStatus().isOk();
 		res.expectBody().consumeWith(result -> {
