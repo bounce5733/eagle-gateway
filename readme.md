@@ -41,6 +41,8 @@
 
 基于spring cloud gateway封装的微服务网关，通过nacos配置中心来管理应用路由
 
+![](https://github.com/bounce5733/eagle-gateway/blob/master/resources/img/gateway.png)
+
 ## 特性
 
 - 动态配置
