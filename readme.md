@@ -66,7 +66,7 @@ spring cloud gateway 框架自带功能请参考官网
   &nbsp;
   - 配置代码
     ```yaml
-        # Sql注入检测（依赖RequestDecrypt)
+        # Sql注入检测（如果是加密数据，配置在加密组件后面）
       - name: SqlInspect
         args:
           # 是否包括查询参数（true)
@@ -119,33 +119,34 @@ todo...
 
 #### 登录校验
 
-  - 访问oauth2认证接口获取访问令牌，构造jwt
+  - 根据客户端提供appid,secret（认证中心注册）访问oauth2 api获取令牌
+
+  - 根据令牌和用户客户端提供的用户账号访问oauth2 api获取含token及权限信息的jwt签名
+  
+  - 网关缓存token及权限信息
+  
+  - 返回token信息给客户端
+
+    ```yaml
+      # 登陆路由
+      routes:
+        predicates:
+        - Header=appid,secret
+        - Header=username,password
+        filters:
+        - name: AppLogin
+    ```
 
 #### 会话认证
 
-  - 对非白请求做本地认证
-    &nbsp;
-  - 配置代码
+  - 根据请求token获取网关缓存的用户信息
+  
+  - 放入http header给后端服务
+  
     ```yaml
-      - AppAuth
-    ```
-
-#### 会话传递
-
-封装HTTP HEADER(gw_session: 会话信息)给后端服务
-
-  - 会话格式：
-  ```json
-    {
-      appID: '应用标识',
-      userName: '用户姓名',
-      orgID: '组织',
-      jobNO: '工号'
-    } 
-  ```
-  - 配置代码
-    ```yaml
-      - SessionHeader
+      default-filters:
+        # 会话认证
+      - SessionAuth
     ```
 
 ### 服务管理
@@ -154,9 +155,17 @@ todo...
 
 ### 基础组件
 
-#### 日志管理
+#### 访问日志
 
-todo
+- 请求耗时：计算请求起止的系统时间
+
+- 访问信息：获取来源ip，时间，目标api地址，返回码，异常信息等
+
+  ```yaml
+    default-filters:
+      # 访问日志
+    - AccessLog
+  ```
 
 
 #### 异常处理
@@ -209,7 +218,7 @@ todo
         redis-rate-limiter.burstCapacity: 100
   ```
 
-### 管理功能
+### 管理组件
 
 #### 黑白名单
 
