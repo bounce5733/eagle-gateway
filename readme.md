@@ -41,7 +41,13 @@
 
 基于spring cloud gateway封装的微服务网关，通过nacos配置中心来管理应用路由
 
+- 架构
+
 ![](./resources/img/gateway.png)
+
+- 路由加载过程
+
+![](./resources/img/route_load.png)
 
 ## 特性
 
